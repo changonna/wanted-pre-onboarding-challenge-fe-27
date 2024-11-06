@@ -1,18 +1,21 @@
 import { useState } from 'react';
-import { validateEmail, validatePassword } from '../../utils/validation';
+import { useNavigate } from 'react-router-dom';
 import { AuthFormData, AuthResponse } from '../../types';
-import { Link, useNavigate } from 'react-router-dom';
+import { validateEmail, validatePassword } from '../../utils/validation';
+import { AuthService } from '../../services/auth/authService';
 
 interface AuthFormProps {
   title: string;
   onSubmit: (formData: AuthFormData) => Promise<AuthResponse>;
   buttonLabel: string;
+  extraButtons?: React.ReactNode;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
   title,
   onSubmit,
   buttonLabel,
+  extraButtons,
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +23,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
   const isFormValid = validateEmail(email) && validatePassword(password);
 
   const navigate = useNavigate();
+  const authService = new AuthService();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +38,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
     // TODO: action 따로 빼기
     onSubmit(formData)
       .then((response) => {
-        localStorage.setItem('token', response.token);
+        authService.setToken(response.token);
         navigate('/');
       })
       .catch((error) => {
@@ -81,10 +85,8 @@ const AuthForm: React.FC<AuthFormProps> = ({
         <button disabled={!isFormValid} type='submit'>
           {buttonLabel}
         </button>
-        <Link to='/'>
-          <button>취소</button>
-        </Link>
       </form>
+      {extraButtons}
     </>
   );
 };

@@ -1,2 +1,2 @@
-export * from './userTypes';
-export * from './todoTypes';
+export * from './UserTypes';
+export * from './TodoTypes';

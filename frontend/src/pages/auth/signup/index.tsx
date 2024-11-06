@@ -1,9 +1,12 @@
-import { createUser } from '../../../api/userApi';
+import { createUser } from '../../../services/auth/authApi';
 import AuthForm from '../../../components/forms/AuthForm';
 import { AuthFormData } from '../../../types';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   // const handleSuccess = (data: AuthResponse) => {};
+
+  const navigate = useNavigate();
 
   const precessSignup = async (formData: AuthFormData) => {
     try {
@@ -19,13 +22,17 @@ const SignUp = () => {
   // const handleSubmitClick = (formData: AuthFormData): Promise<void> => {
   //   return processsignup(formData);
   // };
+  const handleCancelClick = () => {
+    navigate(-1);
+  };
 
   return (
     <>
       <AuthForm
         title='회원가입'
         onSubmit={precessSignup}
-        buttonLabel='회원가입'
+        buttonLabel='가입하기'
+        extraButtons={<button onClick={handleCancelClick}>가입취소</button>}
       />
     </>
   );

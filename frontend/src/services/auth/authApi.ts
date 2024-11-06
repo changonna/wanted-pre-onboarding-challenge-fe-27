@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AuthResponse, AuthFormData } from '../types';
+import { AuthResponse, AuthFormData } from '../../types';
 
 // TODO: 비밀번호 암호화
 export const createUser = async (
