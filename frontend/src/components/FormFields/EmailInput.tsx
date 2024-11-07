@@ -1,28 +1,27 @@
-import { useState } from 'react';
-import CustomInput from '../common/CustomInput';
+import { useInputValidation } from '../../hooks/useInputValidation';
 import { validateEmail } from '../../utils/validation';
+import CustomInput from '../common/CustomInput';
 
 interface IEmailInput {
-  inputValue: string;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string, isValid: boolean) => void;
 }
 
-const EmailInput = ({ inputValue, onChange }: IEmailInput) => {
-  const [isValid, setIsValid] = useState(true);
+const EmailInput = ({ onChange }: IEmailInput) => {
+  const { value, isValid, handleChange } = useInputValidation(validateEmail);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setIsValid(validateEmail(newValue));
-    onChange(newValue);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange(e.target.value);
+    onChange(e.target.value, isValid);
   };
+
   return (
     <>
       <CustomInput
         label='이메일'
         type='email'
-        value={inputValue}
+        value={value}
         placeholder='example@gmail.com'
-        onChange={handleChange}
+        onChange={handleEmailChange}
       />
       {!isValid && (
         <span style={{ color: 'red' }}>유효하지 않은 이메일입니다.</span>

@@ -1,7 +1,7 @@
-import { loginUser } from '../../../services/auth/authApi';
-import AuthForm from '../../../components/forms/AuthForm';
-import { AuthFormData } from '../../../types';
 import { useNavigate } from 'react-router-dom';
+import AuthForm from '../../../components/forms/AuthForm';
+import { loginUser } from '../../../services/auth/authApi';
+import { AuthFormData, AuthFormText, AuthFormType } from '../../../types';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,9 +28,10 @@ const Login = () => {
   return (
     <>
       <AuthForm
-        title='로그인'
+        type={AuthFormType.Login}
+        title={AuthFormText.Login}
         onSubmit={processLogin}
-        buttonLabel='로그인'
+        buttonLabel={AuthFormText.Login}
         extraButtons={
           <button type='button' onClick={handleSignupClick}>
             회원가입

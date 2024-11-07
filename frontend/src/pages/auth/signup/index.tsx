@@ -1,7 +1,7 @@
-import { createUser } from '../../../services/auth/authApi';
-import AuthForm from '../../../components/forms/AuthForm';
-import { AuthFormData } from '../../../types';
 import { useNavigate } from 'react-router-dom';
+import AuthForm from '../../../components/forms/AuthForm';
+import { createUser } from '../../../services/auth/authApi';
+import { AuthFormData, AuthFormText, AuthFormType } from '../../../types';
 
 const SignUp = () => {
   // const handleSuccess = (data: AuthResponse) => {};
@@ -29,7 +29,8 @@ const SignUp = () => {
   return (
     <>
       <AuthForm
-        title='회원가입'
+        type={AuthFormType.Signup}
+        title={AuthFormText.Signup}
         onSubmit={precessSignup}
         buttonLabel='가입하기'
         extraButtons={<button onClick={handleCancelClick}>가입취소</button>}

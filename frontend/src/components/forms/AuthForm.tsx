@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthFormData, AuthResponse } from '../../types';
-import { validateEmail, validatePassword } from '../../utils/validation';
+
 import { AuthService } from '../../services/auth/authService';
+import { AuthFormData, AuthFormType, AuthResponse } from '../../types';
 import { EmailInput, PasswordInput } from '../FormFields';
+import CustomButton from '../common/CustomButton';
 
 interface AuthFormProps {
+  type: AuthFormType;
   title: string;
   onSubmit: (formData: AuthFormData) => Promise<AuthResponse>;
   buttonLabel: string;
@@ -13,6 +15,7 @@ interface AuthFormProps {
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
+  type,
   title,
   onSubmit,
   buttonLabel,
@@ -20,11 +23,18 @@ const AuthForm: React.FC<AuthFormProps> = ({
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const isFormValid = validateEmail(email) && validatePassword(password);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [validStates, setValidStates] = useState({
+    email: false,
+    password: false,
+  });
 
   const navigate = useNavigate();
   const authService = new AuthService();
+
+  useEffect(() => {
+    setIsFormValid(Object.values(validStates).every((isValid) => isValid));
+  }, [validStates]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,14 +70,39 @@ const AuthForm: React.FC<AuthFormProps> = ({
   //   // }
   // };
 
+  const checkEmail = () => {
+    // email 검증 통과하면 -> 활성화
+    // email 체크 api 요청
+  };
+
+  const handleFieldChange = (field: string, isValid: boolean) => {
+    setValidStates((prev) => ({ ...prev, [field]: isValid }));
+  };
+
   return (
     <>
       <h2>{title}</h2>
       <form onSubmit={handleSubmit}>
-        <EmailInput inputValue={email} onChange={(value) => setEmail(value)} />
+        <div>
+          <EmailInput
+            onChange={(value, isValid) => {
+              setEmail(value);
+              handleFieldChange('email', isValid);
+            }}
+          />
+          {type === AuthFormType.Signup && (
+            <CustomButton
+              btnName='중복확인'
+              onClick={checkEmail}
+              disabled={true}
+            />
+          )}
+        </div>
         <PasswordInput
-          inputValue={password}
-          onChange={(value) => setPassword(value)}
+          onChange={(value, isValid) => {
+            setPassword(value);
+            handleFieldChange('password', isValid);
+          }}
         />
         <button disabled={!isFormValid} type='submit'>
           {buttonLabel}

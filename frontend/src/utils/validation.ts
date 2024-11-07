@@ -1,7 +1,9 @@
-export function validateEmail(email: string): boolean {
+import { StringValidator } from '../types';
+
+export const validateEmail: StringValidator = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
-}
+};
 
 /**
  * 비밀번호 유효성 검사 조건:
@@ -9,8 +11,8 @@ export function validateEmail(email: string): boolean {
  * @param password
  * @returns
  */
-export function validatePassword(password: string): boolean {
+export const validatePassword: StringValidator = (password) => {
   const passwordRegex = /^.{8,}$/;
 
   return passwordRegex.test(password);
-}
+};

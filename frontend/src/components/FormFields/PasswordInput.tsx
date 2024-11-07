@@ -1,19 +1,18 @@
-import { useState } from 'react';
+import { useInputValidation } from '../../hooks/useInputValidation';
 import { validatePassword } from '../../utils/validation';
 import CustomInput from '../common/CustomInput';
 
 interface IPasswordInput {
-  inputValue: string;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string, isValid: boolean) => void;
 }
 
-const PasswordInput = ({ inputValue, onChange }: IPasswordInput) => {
-  const [isValid, setIsValid] = useState(true);
+const PasswordInput = ({ onChange }: IPasswordInput) => {
+  const { value, isValid, handleChange } = useInputValidation(validatePassword);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setIsValid(validatePassword(newValue));
-    onChange(newValue);
+    handleChange(newValue);
+    onChange(newValue, isValid);
   };
 
   return (
@@ -21,7 +20,7 @@ const PasswordInput = ({ inputValue, onChange }: IPasswordInput) => {
       <CustomInput
         type='password'
         label='비밀번호'
-        value={inputValue}
+        value={value}
         onChange={handlePasswordChange}
       />
       {!isValid && (
