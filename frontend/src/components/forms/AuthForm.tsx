@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthFormData, AuthResponse } from '../../types';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import { AuthService } from '../../services/auth/authService';
+import { EmailInput, PasswordInput } from '../FormFields';
 
 interface AuthFormProps {
   title: string;
@@ -63,25 +64,11 @@ const AuthForm: React.FC<AuthFormProps> = ({
     <>
       <h2>{title}</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>이메일: </label>
-          <input
-            type='email'
-            name='email'
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            placeholder='abc@example.com'
-          />
-        </div>
-        <div>
-          <label>비밀번호: </label>
-          <input
-            type='password'
-            name='password'
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-        </div>
+        <EmailInput inputValue={email} onChange={(value) => setEmail(value)} />
+        <PasswordInput
+          inputValue={password}
+          onChange={(value) => setPassword(value)}
+        />
         <button disabled={!isFormValid} type='submit'>
           {buttonLabel}
         </button>
